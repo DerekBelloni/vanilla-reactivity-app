@@ -16,5 +16,17 @@ function buildTaskElement(task) {
     currentDiv.appendChild(newDiv);
 }
 
+function createTask() {
+
+}
+
+function completeTask() {
+
+}
+
+function deleteTask() {
+
+}
+
 
 document.getElementById('btn').addEventListener('click', dumpState);

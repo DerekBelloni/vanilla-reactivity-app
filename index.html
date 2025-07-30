@@ -10,8 +10,20 @@
   </head>
 
   <body>
-    <div id="app" class="bg-gray-100">
-      <span class="text-red-500">test</span>
+    <div id="app">
+      <div class="task-card bg-gray-100 flex-col">
+        <div class="mt-4 mx-4 border-b border-gray-400">
+          <span>
+            To Do:
+          </span>
+        </div>
+        <div class="block mx-6 my-6">
+          <button type="button" id="btn"
+            class="rounded bg-gray-500 px-2 py-2 text-white">Go</button>
+        </div>
+        <div id="tasks" class="block ml-6 my-6">
+        </div>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

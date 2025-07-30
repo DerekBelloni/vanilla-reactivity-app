@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+
+body {
+    background-color: #D3D3D3;
+    margin: 0; /* Remove default margin */
+    min-height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center; /* Center card horizontally */
+    align-items: center; /* Center card vertically */
+}
+
+.task-card {
+    width: 30vw;
+    height: 65vh;
+    display: flex;
+    border-radius: 5%; 
+}

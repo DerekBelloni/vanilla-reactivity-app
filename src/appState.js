@@ -1,11 +1,5 @@
-const state = [
-    { name: 'taskOne', id: 1, completed: false },
-    { name: 'taskTwo', id: 2, completed: false },
-    { name: 'taskThree', id: 3, completed: false }
-];
-
-let dependants = new Map();
-let activeEffect = null;
+const state = [];
+let dependants = new WeakMap();
 let effects = new Set();
 
-export { state, dependants, effects, activeEffect };
+export { state, dependants, effects };

@@ -4,8 +4,8 @@ const state = [
     { name: 'taskThree', id: 3, completed: false }
 ];
 
-const dependants = new Map();
-const activeEffect = null;
-const effects = new Set();
+let dependants = new Map();
+let activeEffect = null;
+let effects = new Set();
 
-export { state, dependants, effects };
+export { state, dependants, effects, activeEffect };

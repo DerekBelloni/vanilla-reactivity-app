@@ -1,4 +1,4 @@
-import state from "./appState";
+import { state, dependants } from "./appState";
 import testExport from "./proxy";
 
 export function dumpState() {

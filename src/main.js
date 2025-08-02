@@ -1,7 +1,9 @@
 import state from "./appState";
+import testExport from "./proxy";
 
 export function dumpState() {
     console.log('test');
+    testExport();
     for (let i = 0; i < state.length; i++) {
         console.log(state[i]);
         return buildTaskElement(state[i]);

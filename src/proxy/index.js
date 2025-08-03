@@ -16,7 +16,9 @@ function reactive(obj) {
             return result;
         },
         set(target, prop, value, receiver) {
-
+            const result = Reflect.set(target, prop, value, receiver);
+            trigger(target, prop);
+            return result;
         }
     });
 }
@@ -25,30 +27,27 @@ function track(target, prop) {
     if (activeEffect) {
         const effects = getPropSubscribers(target, prop)
         effects.add(activeEffect)
-        console.log('banana', effects);
     }
 }
 
-function trigger() { }
+function trigger(target, prop) {
+    const effects = getPropSubscribers(target, prop);
+    effects.forEach((effect) => effect());
+}
 
 function dependancyChange(fn) {
-    console.log("in dep change: ", fn)
     let effect = () => {
         activeEffect = fn;
         fn();
         activeEffect = null;
     }
-    console.log('effect:', effect)
     effect()
-    console.log('active effect:', activeEffect);
 }
 
 function getPropSubscribers(target, prop) {
     let depsMap = dependants.get(target)
-    console.log('deps map: ', depsMap)
     if (!depsMap) {
         depsMap = new Map();
-        console.log('deps map:', depsMap)
         dependants.set(target, depsMap);
     }
     let dep = depsMap.get(prop);
@@ -56,7 +55,6 @@ function getPropSubscribers(target, prop) {
         dep = new Set();
         depsMap.set(prop, dep);
     }
-    console.log('dep: ', dep)
     return dep;
 }
 

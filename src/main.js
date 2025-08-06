@@ -15,26 +15,10 @@ function renderTasks() {
     });
 }
 
-function createTask(task, domInteraction) {
-    if (domInteraction) {
-        const domInputValue = document.getElementById('newTask').value;
-        console.log('dom input value:', domInputValue);
-        return;
-    }
-
-
-    if (state.includes(task.id)) {
-        return;
-    }
-
-    state.push(task);
-    console.log('dependants: ', dependants);
-}
-
 function completeTask() {
 }
 
-function readInput() {
+function createTask() {
     const inputValue = document.getElementById('newTask').value;
     let newTask = {};
     if (inputValue) {
@@ -45,6 +29,7 @@ function readInput() {
         }
         state.push(newTask);
     }
+    document.getElementById('newTask').value = '';
 }
 
 function deleteTask() {
@@ -52,9 +37,6 @@ function deleteTask() {
 
 let newTask = reactive({ id: 1, name: 'test', complete: false });
 dependancyChange(renderTasks);
-createTask(newTask);
-createTask(reactive({ id: 2, name: 'test two', complete: false }))
-//renderTasks();
 
-document.getElementById('addTask').addEventListener('click', readInput);
+document.getElementById('addTask').addEventListener('click', createTask);
 

@@ -1,6 +1,7 @@
 import { state, dependants } from '../appState';
 let activeEffect = null;
 
+
 function reactive(obj) {
     return new Proxy(obj, {
         get(target, prop, receiver) {

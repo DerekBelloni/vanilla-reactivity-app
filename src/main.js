@@ -9,6 +9,10 @@ function renderTasks() {
     state.forEach((task) => {
         const newDiv = document.createElement("div");
         const taskName = document.createTextNode(task.name);
+        if (task.complete) {
+            newDiv.style.textDecoration = 'line-through';
+        }
+
         newDiv.appendChild(taskName);
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
@@ -22,21 +26,24 @@ function createTask() {
     const inputValue = document.getElementById('newTask').value;
     let newTask = {};
     if (inputValue) {
-        newTask = {
+        newTask = reactive({
             id: state.length,
             name: inputValue,
             complete: false
-        }
+        });
         state.push(newTask);
-    }
+    };
     document.getElementById('newTask').value = '';
+    console.log('dependants:', dependants);
+}
+
+function filterTasks() {
+
 }
 
 function deleteTask() {
 }
 
-let newTask = reactive({ id: 1, name: 'test', complete: false });
 dependancyChange(renderTasks);
-
 document.getElementById('addTask').addEventListener('click', createTask);
 

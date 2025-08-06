@@ -2,7 +2,6 @@ import { state, dependants } from "./appState";
 import { reactive, dependancyChange } from "./proxy/index.js";
 
 
-// I believe this would be an effect that needs subscribed to the task handed into it
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
     taskDiv.innerHTML = '';
@@ -34,7 +33,6 @@ function createTask() {
         state.push(newTask);
     };
     document.getElementById('newTask').value = '';
-    console.log('dependants:', dependants);
 }
 
 function filterTasks() {

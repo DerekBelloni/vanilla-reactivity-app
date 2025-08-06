@@ -9,7 +9,6 @@ function reactive(obj) {
             track(target, prop);
 
 
-            // if the result is an object we need to recursively hand it into the 'reactive()' to provide tracking for nested structures
             if ((typeof result === Object && result !== null) || (typeof result === Array && result.length > 0)) {
                 return reactive(result);
             }
@@ -30,7 +29,6 @@ function ref(val) {
 
 function track(target, prop) {
     if (activeEffect) {
-        console.log('active effect', activeEffect)
         const effects = getPropSubscribers(target, prop)
         effects.add(activeEffect)
     }

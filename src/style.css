@@ -26,3 +26,11 @@ body {
     border-radius: 0px 20px 20px 0px;
     padding-right: 1em;
 }
+
+.task-div {
+    align-items: center;
+    display: flex;
+    gap: 0.50rem;
+    padding: 0.25rem;
+    margin-bottom: 0.1rem;
+}

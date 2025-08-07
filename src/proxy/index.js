@@ -41,7 +41,7 @@ function trigger(target, prop) {
 
 function dependancyChange(fn) {
     let effect = () => {
-        activeEffect = fn;
+        activeEffect = effect;
         fn();
         activeEffect = null;
     }

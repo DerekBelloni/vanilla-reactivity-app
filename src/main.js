@@ -4,21 +4,32 @@ import { reactive, dependancyChange } from "./proxy/index.js";
 
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
+    taskDiv.addEventListener('click', completeTask);
     taskDiv.innerHTML = '';
-    state.forEach((task) => {
+    state.forEach((task, index) => {
         const newDiv = document.createElement("div");
+        newDiv.dataset.id = index + 1;
+        const checkboxElmt = document.createElement("input");
+        checkboxElmt.type = "checkbox";
         const taskName = document.createTextNode(task.name);
         if (task.complete) {
             newDiv.style.textDecoration = 'line-through';
         }
-
+        newDiv.className = "task-div";
+        newDiv.appendChild(checkboxElmt);
         newDiv.appendChild(taskName);
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
 }
 
-function completeTask() {
+function completeTask(event) {
+    const taskID = event.target.parentElement.dataset.id;
+    console.log('taskID:', taskID, 'state:', state);
+    if (taskID !== null) {
+        const completedTask = state[taskID - 1];
+        completedTask.complete = true;
+    }
 }
 
 function createTask() {

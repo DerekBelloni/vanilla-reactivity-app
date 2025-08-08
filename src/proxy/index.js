@@ -1,4 +1,4 @@
-import { state, dependants } from '../appState';
+import { dependants } from '../appState';
 let activeEffect = null;
 
 
@@ -23,8 +23,19 @@ function reactive(obj) {
     });
 }
 
-function ref(val) {
-
+function ref(value) {
+    const refObject = {
+        get value() {
+            console.log('in track of ref object', value);
+            track(refObject, 'value');
+            return value;
+        },
+        set value(newVal) {
+            value = newVal;
+            trigger(refObject, 'value')
+        }
+    }
+    return refObject;
 }
 
 function track(target, prop) {
@@ -62,4 +73,4 @@ function getPropSubscribers(target, prop) {
     return dep;
 }
 
-export { reactive, dependancyChange };
+export { reactive, ref, dependancyChange };

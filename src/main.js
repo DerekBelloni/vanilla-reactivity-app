@@ -1,4 +1,4 @@
-import { state, dependants } from "./appState";
+import { dependants, state, taskCount } from "./appState";
 import { reactive, dependancyChange } from "./proxy/index.js";
 
 
@@ -25,7 +25,6 @@ function renderTasks() {
 
 function completeTask(event) {
     const taskID = event.target.parentElement.dataset.id;
-    console.log('taskID:', taskID, 'state:', state);
     if (taskID !== null) {
         const completedTask = state[taskID - 1];
         completedTask.complete = true;
@@ -42,7 +41,10 @@ function createTask() {
             complete: false
         });
         state.push(newTask);
+        taskCount.value = taskCount.value + 1;
+        //console.log(taskCount.value);
     };
+    console.log('dependants in create task: ', dependants);
     document.getElementById('newTask').value = '';
 }
 
@@ -53,6 +55,7 @@ function filterTasks() {
 function deleteTask() {
 }
 
+dependancyChange(createTask);
 dependancyChange(renderTasks);
 document.getElementById('addTask').addEventListener('click', createTask);
 

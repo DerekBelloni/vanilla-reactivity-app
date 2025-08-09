@@ -41,9 +41,8 @@ function createTask() {
             complete: false
         });
         state.push(newTask);
-        taskCount.value = taskCount.value + 1;
-        //console.log(taskCount.value);
     };
+    taskCount.value = state.length;
     console.log('dependants in create task: ', dependants);
     document.getElementById('newTask').value = '';
 }
@@ -55,7 +54,15 @@ function filterTasks() {
 function deleteTask() {
 }
 
-dependancyChange(createTask);
+function manageTaskCount() {
+    // this needs to run when a task is added to state
+    // meaning it is a subscriber to the state.length
+    // once it is triggered I need to get an html element that displays the value of the count
+    // update the count and rerender it
+    document.getElementById('task-count').textContent = taskCount.value;
+}
+
+dependancyChange(manageTaskCount);
 dependancyChange(renderTasks);
 document.getElementById('addTask').addEventListener('click', createTask);
 

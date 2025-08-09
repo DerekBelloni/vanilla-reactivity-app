@@ -39,6 +39,8 @@ function ref(value) {
 }
 
 function track(target, prop) {
+    console.log('prop', prop)
+    console.log('active effect: ', activeEffect)
     if (activeEffect) {
         const effects = getPropSubscribers(target, prop)
         effects.add(activeEffect)
@@ -47,6 +49,9 @@ function track(target, prop) {
 
 function trigger(target, prop) {
     const effects = getPropSubscribers(target, prop);
+    if (prop === 'value') {
+        console.log('effects for value in trigger', effects)
+    }
     effects.forEach((effect) => effect());
 }
 

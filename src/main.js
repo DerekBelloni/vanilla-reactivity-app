@@ -13,6 +13,7 @@ function renderTasks() {
         checkboxElmt.type = "checkbox";
         const taskName = document.createTextNode(task.name);
         if (task.complete) {
+            checkboxElmt.checked = true;
             newDiv.style.textDecoration = 'line-through';
         }
         newDiv.className = "task-div";

@@ -22,6 +22,12 @@ body {
     border-radius: 20px 0px 0px 20px;
 }
 
+.task-filter {
+    width: 15vw;
+    border-radius: 10px 10px 10px 10px;
+    padding: 0.5em;
+}
+
 .task-input-btn {
     border-radius: 0px 20px 20px 0px;
     padding-right: 1em;
@@ -32,5 +38,5 @@ body {
     display: flex;
     gap: 0.50rem;
     padding: 0.25rem;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.5rem;
 }

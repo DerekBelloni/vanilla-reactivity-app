@@ -55,6 +55,7 @@ function completeTask(event) {
 
         }
     }
+    filterTasks(event);
 }
 
 function createTask() {
@@ -72,7 +73,12 @@ function createTask() {
     document.getElementById('newTask').value = '';
 }
 
-function filterTasks() {
+function filterTasks(event) {
+    const filterElmt = document.getElementById('filter').value;
+    if (state.length <= 0) {
+        console.log('gere');
+        document.getElementById('filter').value = 'Filter Tasks';
+    }
 
 }
 
@@ -88,5 +94,6 @@ function manageTaskCount() {
 
 dependancyChange(manageTaskCount);
 dependancyChange(renderTasks);
+document.getElementById('filter').addEventListener('change', filterTasks);
 document.getElementById('addTask').addEventListener('click', createTask);
 

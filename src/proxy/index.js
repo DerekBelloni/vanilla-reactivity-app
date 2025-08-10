@@ -46,9 +46,6 @@ function track(target, prop) {
 
 function trigger(target, prop) {
     const effects = getPropSubscribers(target, prop);
-    if (prop === 'value') {
-        console.log('effects for value in trigger', effects)
-    }
     effects.forEach((effect) => effect());
 }
 

@@ -13,12 +13,20 @@
     <div id="app">
       <div class="my-2 flex flex-row">
         <input type="text" id="newTask" class="bg-gray-100 task-input"
-          minlength="4" maxlength="8" size="10" />
+          minlength="4" maxlength="20" size="20" />
         <button type="button" id="addTask"
           class="task-input-btn bg-gray-500 px-2 py-2 text-white">Add</button>
         <div class="flex items-center ml-6">
           <span id="task-count"></span>
         </div>
+      </div>
+
+      <div class="my-6">
+        <select class="task-filter bg-gray-100" id="filter">
+          <option value="test">Filter Tasks</option>
+          <option value="complete">Complete</option>
+          <option value="incomplete">Incomplete</option>
+        </select>
       </div>
 
       <div class="task-card bg-gray-100 flex-col">

@@ -26,7 +26,6 @@ function reactive(obj) {
 function ref(value) {
     const refObject = {
         get value() {
-            console.log('in track of ref object', value);
             track(refObject, 'value');
             return value;
         },
@@ -39,8 +38,6 @@ function ref(value) {
 }
 
 function track(target, prop) {
-    console.log('prop', prop)
-    console.log('active effect: ', activeEffect)
     if (activeEffect) {
         const effects = getPropSubscribers(target, prop)
         effects.add(activeEffect)

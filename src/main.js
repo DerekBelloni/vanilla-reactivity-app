@@ -7,28 +7,53 @@ function renderTasks() {
     taskDiv.addEventListener('click', completeTask);
     taskDiv.innerHTML = '';
     state.forEach((task, index) => {
-        const newDiv = document.createElement("div");
-        newDiv.dataset.id = index + 1;
-        const checkboxElmt = document.createElement("input");
-        checkboxElmt.type = "checkbox";
-        const taskName = document.createTextNode(task.name);
+        const checkboxElmt = createCheckBoxElmt();
+        const deleteElmt = createDeleteElmt();
+        const newDiv = createTaskDiv(task, checkboxElmt, deleteElmt, index);
+
         if (task.complete) {
             checkboxElmt.checked = true;
             newDiv.style.textDecoration = 'line-through';
         }
-        newDiv.className = "task-div";
-        newDiv.appendChild(checkboxElmt);
-        newDiv.appendChild(taskName);
+
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
 }
 
+function createCheckBoxElmt() {
+    const checkboxElmt = document.createElement("input");
+    checkboxElmt.type = "checkbox";
+    return checkboxElmt;
+}
+
+function createDeleteElmt() {
+    const anchorElmt = document.createElement("a");
+    anchorElmt.textContent = 'x';
+    anchorElmt.href = "#";
+    anchorElmt.addEventListener('click', deleteTask);
+    return anchorElmt;
+}
+
+function createTaskDiv(task, checkboxElmt, deleteElmt, index) {
+    const newDiv = document.createElement("div");
+    const taskName = document.createTextNode(task.name);
+    newDiv.dataset.id = index + 1;
+    newDiv.className = "task-div";
+    newDiv.appendChild(checkboxElmt);
+    newDiv.appendChild(taskName);
+    newDiv.appendChild(deleteElmt);
+    return newDiv;
+}
+
 function completeTask(event) {
-    const taskID = event.target.parentElement.dataset.id;
-    if (taskID !== null) {
-        const completedTask = state[taskID - 1];
-        completedTask.complete = true;
+    if (event.target.type === 'checkbox') {
+        const taskID = event.target.parentElement.dataset.id;
+        if (taskID !== null) {
+            const completedTask = state[taskID - 1];
+            completedTask.complete = true;
+
+        }
     }
 }
 
@@ -44,7 +69,6 @@ function createTask() {
         state.push(newTask);
     };
     taskCount.value = state.length;
-    console.log('dependants in create task: ', dependants);
     document.getElementById('newTask').value = '';
 }
 
@@ -52,14 +76,13 @@ function filterTasks() {
 
 }
 
-function deleteTask() {
+function deleteTask(event) {
+    const taskID = event.target.parentElement.dataset.id;
+    const idx = taskID - 1;
+    state.splice(idx, 1);
 }
 
 function manageTaskCount() {
-    // this needs to run when a task is added to state
-    // meaning it is a subscriber to the state.length
-    // once it is triggered I need to get an html element that displays the value of the count
-    // update the count and rerender it
     document.getElementById('task-count').textContent = taskCount.value;
 }
 

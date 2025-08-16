@@ -5,7 +5,7 @@ let activeEffect = null;
 function reactive(obj) {
     return new Proxy(obj, {
         get(target, prop, receiver) {
-            const result = Reflect.get(target, prop, receiver);
+            let result = Reflect.get(target, prop, receiver);
             track(target, prop);
 
 

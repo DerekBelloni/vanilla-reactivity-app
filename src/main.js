@@ -1,12 +1,24 @@
 import { dependants, state, taskCount } from "./appState";
-import { reactive, dependancyChange } from "./proxy/index.js";
+import { reactive, dependancyChange, ref } from "./proxy/index.js";
 
+let filteredTasks = reactive([]);
+let filterActive = ref(false);
 
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
     taskDiv.addEventListener('click', completeTask);
     taskDiv.innerHTML = '';
-    state.forEach((task, index) => {
+
+    let activeState = reactive([]);
+
+    if (filterActive.value && filteredTasks.length > 0) {
+        console.log('shebuya');
+        activeState.push(...filteredTasks)
+    } else activeState = state;
+
+    console.log('dependants:', dependants);
+
+    activeState.forEach((task, index) => {
         const checkboxElmt = createCheckBoxElmt();
         const deleteElmt = createDeleteElmt();
         const newDiv = createTaskDiv(task, checkboxElmt, deleteElmt, index);
@@ -55,7 +67,6 @@ function completeTask(event) {
 
         }
     }
-    filterTasks(event);
 }
 
 function createTask() {
@@ -74,12 +85,20 @@ function createTask() {
 }
 
 function filterTasks(event) {
-    const filterElmt = document.getElementById('filter').value;
+    const filterVal = document.getElementById('filter').value;
     if (state.length <= 0) {
-        console.log('gere');
-        document.getElementById('filter').value = 'Filter Tasks';
+        document.getElementById('filter').value = 'test';
+    }
+    if (filterVal != 'test') {
+        filterActive.value = true;
+    } else {
+        filterActive.value = false;
+        return;
     }
 
+    const complete = filterVal == 'complete' ? true : false;
+    const temp = state.filter((task) => task.complete == complete);
+    filteredTasks.push(...temp);
 }
 
 function deleteTask(event) {

@@ -5,7 +5,7 @@ let activeEffect = null;
 function reactive(obj) {
     return new Proxy(obj, {
         get(target, prop, receiver) {
-            let result = Reflect.get(target, prop, receiver);
+            const result = Reflect.get(target, prop, receiver);
             track(target, prop);
 
 
@@ -49,12 +49,13 @@ function trigger(target, prop) {
     effects.forEach((effect) => effect());
 }
 
-function dependancyChange(fn) {
+function dependancyChange(fn, fnName) {
     let effect = () => {
         activeEffect = effect;
         fn();
         activeEffect = null;
     }
+    effect.__name = fnName;
     effect()
 }
 

@@ -3,20 +3,17 @@ import { reactive, dependancyChange, ref } from "./proxy/index.js";
 
 let filteredTasks = reactive([]);
 let filterActive = ref(false);
+let activeState = reactive([]);
 
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
     taskDiv.addEventListener('click', completeTask);
     taskDiv.innerHTML = '';
 
-    let activeState = reactive([]);
-
-    if (filterActive.value && filteredTasks.length > 0) {
+    if (filterActive.value) {
         console.log('shebuya');
-        activeState.push(...filteredTasks)
+        activeState = filteredTasks;
     } else activeState = state;
-
-    console.log('dependants:', dependants);
 
     activeState.forEach((task, index) => {
         const checkboxElmt = createCheckBoxElmt();
@@ -50,11 +47,13 @@ function createDeleteElmt() {
 function createTaskDiv(task, checkboxElmt, deleteElmt, index) {
     const newDiv = document.createElement("div");
     const taskName = document.createTextNode(task.name);
+
     newDiv.dataset.id = index + 1;
     newDiv.className = "task-div";
     newDiv.appendChild(checkboxElmt);
     newDiv.appendChild(taskName);
     newDiv.appendChild(deleteElmt);
+
     return newDiv;
 }
 
@@ -80,6 +79,7 @@ function createTask() {
         });
         state.push(newTask);
     };
+
     taskCount.value = state.length;
     document.getElementById('newTask').value = '';
 }
@@ -98,6 +98,9 @@ function filterTasks(event) {
 
     const complete = filterVal == 'complete' ? true : false;
     const temp = state.filter((task) => task.complete == complete);
+
+    filterActive.value = true;
+    filteredTasks.length = 0;
     filteredTasks.push(...temp);
 }
 
@@ -111,8 +114,9 @@ function manageTaskCount() {
     document.getElementById('task-count').textContent = taskCount.value;
 }
 
-dependancyChange(manageTaskCount);
-dependancyChange(renderTasks);
+dependancyChange(manageTaskCount, 'manageTaskCount');
+dependancyChange(renderTasks, 'renderTasks');
+
 document.getElementById('filter').addEventListener('change', filterTasks);
 document.getElementById('addTask').addEventListener('click', createTask);
 

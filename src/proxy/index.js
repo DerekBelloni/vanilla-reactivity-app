@@ -9,7 +9,7 @@ function reactive(obj) {
             track(target, prop);
 
 
-            if ((typeof result === Object && result !== null) || (typeof result === Array && result.length > 0)) {
+            if ((typeof result === Object && result !== null)) {
                 return reactive(result);
             }
 

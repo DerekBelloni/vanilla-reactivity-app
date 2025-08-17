@@ -11,7 +11,6 @@ function renderTasks() {
     taskDiv.innerHTML = '';
 
     if (filterActive.value) {
-        console.log('shebuya');
         activeState = filteredTasks;
     } else activeState = state;
 
@@ -48,7 +47,7 @@ function createTaskDiv(task, checkboxElmt, deleteElmt, index) {
     const newDiv = document.createElement("div");
     const taskName = document.createTextNode(task.name);
 
-    newDiv.dataset.id = index + 1;
+    newDiv.dataset.id = task.id;
     newDiv.className = "task-div";
     newDiv.appendChild(checkboxElmt);
     newDiv.appendChild(taskName);
@@ -73,7 +72,7 @@ function createTask() {
     let newTask = {};
     if (inputValue) {
         newTask = reactive({
-            id: state.length,
+            id: state.length + 1,
             name: inputValue,
             complete: false
         });
@@ -84,7 +83,7 @@ function createTask() {
     document.getElementById('newTask').value = '';
 }
 
-function filterTasks(event) {
+function filterTasks() {
     const filterVal = document.getElementById('filter').value;
     if (state.length <= 0) {
         document.getElementById('filter').value = 'test';
@@ -104,14 +103,26 @@ function filterTasks(event) {
     filteredTasks.push(...temp);
 }
 
+function resetTaskIDs() {
+
+}
+
 function deleteTask(event) {
-    const taskID = event.target.parentElement.dataset.id;
-    const idx = taskID - 1;
-    state.splice(idx, 1);
+    const taskID = parseInt(event.target.parentElement.dataset.id);
+    let idxToDelete = state.findIndex((item) => {
+        return item.id === taskID;
+    });
+
+    state.splice(idxToDelete, 1);
+    taskCount.value = state.length;
+
+    if (filterActive.value) {
+        filterTasks();
+    }
 }
 
 function manageTaskCount() {
-    document.getElementById('task-count').textContent = taskCount.value;
+    document.getElementById('task-count').textContent = `Task Count: ${taskCount.value}`;
 }
 
 dependancyChange(manageTaskCount, 'manageTaskCount');

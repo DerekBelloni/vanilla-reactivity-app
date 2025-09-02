@@ -49,13 +49,14 @@ function trigger(target, prop) {
     effects.forEach((effect) => effect());
 }
 
-function dependancyChange(fn, fnName) {
+function dependancyChange(fn, fnName, computed = false) {
     let effect = () => {
         activeEffect = effect;
         fn();
         activeEffect = null;
     }
     effect.__name = fnName;
+    if (computed) effect.__isComputed = true;
     effect()
 }
 

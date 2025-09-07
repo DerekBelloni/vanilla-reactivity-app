@@ -4,5 +4,9 @@ let state = reactive([]);
 let dependants = new WeakMap();
 let effects = new Set();
 let taskCount = ref(0);
+let _activeSubscriber = null;
 
-export { state, dependants, taskCount, effects };
+const globals = {
+    activeSubscriber: _activeSubscriber 
+
+export { globals, state, dependants, taskCount, effects };

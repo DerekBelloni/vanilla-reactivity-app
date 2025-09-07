@@ -1,4 +1,4 @@
-import { dependants } from '../appState';
+import { globals, dependants } from '../appState';
 let activeEffect = null;
 
 
@@ -38,7 +38,7 @@ function ref(value) {
 }
 
 function track(target, prop) {
-    if (activeEffect) {
+    if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
         effects.add(activeEffect)
     }
@@ -51,9 +51,9 @@ function trigger(target, prop) {
 
 function dependancyChange(fn, fnName, computed = false) {
     let effect = () => {
-        activeEffect = effect;
+        globals.activeSubscriber = effect;
         fn();
-        activeEffect = null;
+        globals.activeSubscriber = null;
     }
     effect.__name = fnName;
     if (computed) effect.__isComputed = true;
@@ -74,4 +74,4 @@ function getPropSubscribers(target, prop) {
     return dep;
 }
 
-export { reactive, ref, dependancyChange };
+export { reactive, ref, dependancyChange, getPropSubscribers };

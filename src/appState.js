@@ -7,6 +7,7 @@ let taskCount = ref(0);
 let _activeSubscriber = null;
 
 const globals = {
-    activeSubscriber: _activeSubscriber 
+    activeSubscriber: _activeSubscriber
+}
 
 export { globals, state, dependants, taskCount, effects };

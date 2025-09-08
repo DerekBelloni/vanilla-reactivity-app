@@ -1,9 +1,14 @@
 import { dependants, state, taskCount } from "./appState";
+import { Computed } from "./proxy/computed.js";
 import { reactive, dependancyChange, ref } from "./proxy/index.js";
 
 let filteredTasks = reactive([]);
 let filterActive = ref(false);
 let activeState = reactive([]);
+let testData = reactive({ a: 1, b: 2 });
+let sum = new Computed(() => {
+    return testData.a + testData.b;
+});
 
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
@@ -27,6 +32,8 @@ function renderTasks() {
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
+    const sumDiv = document.getElementById('sum');
+    sumDiv.textContent = sum.value;
 }
 
 function createCheckBoxElmt() {
@@ -62,7 +69,7 @@ function completeTask(event) {
         if (taskID !== null) {
             const completedTask = state[taskID - 1];
             completedTask.complete = true;
-
+            testData.a++;
         }
     }
 }

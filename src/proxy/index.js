@@ -1,5 +1,5 @@
 import { globals, dependants } from '../appState';
-let activeEffect = null;
+import { Computed } from '../proxy/computed';
 
 
 function reactive(obj) {
@@ -40,13 +40,23 @@ function ref(value) {
 function track(target, prop) {
     if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
-        effects.add(activeEffect)
+        effects.add(globals.activeSubscriber)
+
+        if (globals.activeSubscriber.deps instanceof Set) {
+            globals.activeSubscriber.deps.add({ target, prop })
+        }
     }
 }
 
 function trigger(target, prop) {
     const effects = getPropSubscribers(target, prop);
-    effects.forEach((effect) => effect());
+    effects.forEach((effect) => {
+        if (effect instanceof Computed) {
+            effect._invalidate()
+        } else {
+            effect()
+        }
+    });
 }
 
 function dependancyChange(fn, fnName, computed = false) {

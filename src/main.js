@@ -16,7 +16,7 @@ let activeSum = new Computed(() => {
     state.forEach((task) => {
         if (task.complete) {
             sum++;
-        }
+        } else if (!task.complete && sum > 0) sum--;
     });
     return sum;
 })
@@ -43,6 +43,9 @@ function renderTasks() {
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
+
+    const activeSumDiv = document.getElementById('activeSum');
+    activeSumDiv.textContent = `Completed Tasks: ${activeSum.value}`;
 }
 
 function createCheckBoxElmt() {
@@ -50,6 +53,7 @@ function createCheckBoxElmt() {
     checkboxElmt.type = "checkbox";
     return checkboxElmt;
 }
+
 
 function createDeleteElmt() {
     const anchorElmt = document.createElement("a");
@@ -73,14 +77,15 @@ function createTaskDiv(task, checkboxElmt, deleteElmt, index) {
 }
 
 function completeTask(event) {
-    activeSum.value;
     if (event.target.type === 'checkbox') {
         const taskID = event.target.parentElement.dataset.id;
         if (taskID !== null) {
+            console.log('inside complete task');
             const completedTask = state[taskID - 1];
             completedTask.complete = !completedTask.complete;
         }
     }
+    activeSum.value;
 }
 
 function createTask() {

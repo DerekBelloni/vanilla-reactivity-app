@@ -6,9 +6,20 @@ let filteredTasks = reactive([]);
 let filterActive = ref(false);
 let activeState = reactive([]);
 let testData = reactive({ a: 1, b: 2 });
-let sum = new Computed(() => {
+
+let inactiveSum = new Computed(() => {
     return testData.a + testData.b;
 });
+
+let activeSum = new Computed(() => {
+    let sum = 0;
+    state.forEach((task) => {
+        if (task.complete) {
+            sum++;
+        }
+    });
+    return sum;
+})
 
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
@@ -32,8 +43,6 @@ function renderTasks() {
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
-    const sumDiv = document.getElementById('sum');
-    sumDiv.textContent = sum.value;
 }
 
 function createCheckBoxElmt() {
@@ -64,12 +73,12 @@ function createTaskDiv(task, checkboxElmt, deleteElmt, index) {
 }
 
 function completeTask(event) {
+    activeSum.value;
     if (event.target.type === 'checkbox') {
         const taskID = event.target.parentElement.dataset.id;
         if (taskID !== null) {
             const completedTask = state[taskID - 1];
-            completedTask.complete = true;
-            testData.a++;
+            completedTask.complete = !completedTask.complete;
         }
     }
 }

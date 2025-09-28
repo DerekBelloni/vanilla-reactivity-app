@@ -52,7 +52,6 @@ export class Computed {
                 // else it is an effect, in which case call it
                 sub();
             }
-
         }
     }
 

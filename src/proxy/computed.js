@@ -14,7 +14,6 @@ export class Computed {
     }
 
     _compute() {
-        console.log('in computed')
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
             // Since we are maintaining an independent data structure for computeds

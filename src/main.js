@@ -5,10 +5,15 @@ import { reactive, dependancyChange, ref } from "./proxy/index.js";
 let filteredTasks = reactive([]);
 let filterActive = ref(false);
 let activeState = reactive([]);
-let testData = reactive({ a: 1, b: 2 });
 
 let inactiveSum = new Computed(() => {
-    return testData.a + testData.b;
+    let sum = 0;
+    state.forEach((task) => {
+        if (!task.complete) {
+            sum++;
+        }
+    });
+    return sum;
 });
 
 let activeSum = new Computed(() => {
@@ -16,7 +21,7 @@ let activeSum = new Computed(() => {
     state.forEach((task) => {
         if (task.complete) {
             sum++;
-        } else if (!task.complete && sum > 0) sum--;
+        }
     });
     return sum;
 })
@@ -29,6 +34,10 @@ function renderTasks() {
     if (filterActive.value) {
         activeState = filteredTasks;
     } else activeState = state;
+
+
+    const incompleteSumDiv = document.getElementById('incompleteSum');
+    incompleteSumDiv.textContent = `Incomplete Tasks: ${inactiveSum.value}`;
 
     activeState.forEach((task, index) => {
         const checkboxElmt = createCheckBoxElmt();
@@ -44,7 +53,7 @@ function renderTasks() {
         currentDiv.appendChild(newDiv);
     });
 
-    const activeSumDiv = document.getElementById('activeSum');
+    const activeSumDiv = document.getElementById('completeSum');
     activeSumDiv.textContent = `Completed Tasks: ${activeSum.value}`;
 }
 
@@ -85,7 +94,6 @@ function completeTask(event) {
             completedTask.complete = !completedTask.complete;
         }
     }
-    activeSum.value;
 }
 
 function createTask() {

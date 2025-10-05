@@ -3,7 +3,7 @@ import { globals } from "../appState";
 
 
 export class Computed {
-    constructor(getter) {
+    constructor(getter, name = null) {
         this.dirty = true;
         this.cached = null;
         // upstream reactives
@@ -11,6 +11,7 @@ export class Computed {
         // downstream subscribers
         this.dependents = new Set();
         this.getter = getter;
+        this.name = name;
     }
 
     _compute() {
@@ -19,6 +20,8 @@ export class Computed {
             // Since we are maintaining an independent data structure for computeds
             // We need to retrieve the deps that the computed subcribes to out of the weak map
             // for refs and reactives
+            console.log('dep in _computed: ', dep)
+            console.log('name of computed: ', this.name)
             const subscriberSet = getPropSubscribers(dep.target, dep.prop);
             // Then delete this class instance from the the subscriber set
             subscriberSet.delete(this);
@@ -38,14 +41,17 @@ export class Computed {
     }
 
     _invalidate() {
+        console.log("computed name in invalidate:", this.name);
         // check if dirty, if so return
         if (this.dirty) return;
         // set dirty to true
         this.dirty = true;
         // loop over dependants (downstream subscribers)
-        for (let sub in this.dependents) {
+        console.log('dependants', this.dependents)
+        for (let sub of this.dependents) {
             // if the dependant is a computed call the invalidate method on that computed class instance
             if (sub instanceof Computed) {
+                console.log('sub in this.dependents:', sub)
                 sub._invalidate();
             } else {
                 // else it is an effect, in which case call it

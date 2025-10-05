@@ -74,6 +74,8 @@ function getPropSubscribers(target, prop) {
     let depsMap = dependants.get(target)
     if (!depsMap) {
         depsMap = new Map();
+        console.log('target: ', target);
+        console.log('prop: ', prop);
         dependants.set(target, depsMap);
     }
     let dep = depsMap.get(prop);

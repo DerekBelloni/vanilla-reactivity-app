@@ -26,6 +26,11 @@ let activeSum = new Computed(() => {
     return sum;
 })
 
+
+let testChainComputed = new Computed(() => {
+    return `Inactive Sum: ${inactiveSum.value}, Active Sum: ${activeSum.value}`
+}, 'testChain')
+
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
     taskDiv.addEventListener('click', completeTask);
@@ -38,6 +43,14 @@ function renderTasks() {
 
     const incompleteSumDiv = document.getElementById('incompleteSum');
     incompleteSumDiv.textContent = `Incomplete Tasks: ${inactiveSum.value}`;
+
+
+    const activeSumDiv = document.getElementById('completeSum');
+    activeSumDiv.textContent = `Completed Tasks: ${activeSum.value}`;
+
+    const chainComputedDiv = document.getElementById('chainedComputed');
+    chainComputedDiv.textContent = testChainComputed.value;
+
 
     activeState.forEach((task, index) => {
         const checkboxElmt = createCheckBoxElmt();
@@ -52,9 +65,6 @@ function renderTasks() {
         const currentDiv = document.getElementById('tasks');
         currentDiv.appendChild(newDiv);
     });
-
-    const activeSumDiv = document.getElementById('completeSum');
-    activeSumDiv.textContent = `Completed Tasks: ${activeSum.value}`;
 }
 
 function createCheckBoxElmt() {

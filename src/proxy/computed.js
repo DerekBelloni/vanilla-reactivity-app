@@ -15,14 +15,23 @@ export class Computed {
     }
 
     _compute() {
+        console.log('[top level _compute, computed name]:', this.name);
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
+            // declare subscriber set so since it will be set in conditionally based scoping
+            let subscriberSet = null;
             // Since we are maintaining an independent data structure for computeds
             // We need to retrieve the deps that the computed subcribes to out of the weak map
             // for refs and reactives
-            console.log('dep in _computed: ', dep)
-            console.log('name of computed: ', this.name)
-            const subscriberSet = getPropSubscribers(dep.target, dep.prop);
+            console.log('dep in _compute: ', dep)
+            if (!!dep.deps && dep.deps.size > 0) {
+                console.log('dep in side size check: ', dep);
+                subscriberSet = this._checkDepsSet(dep.deps);
+                console.log('subscriber set for TEST:', subscriberSet);
+            } else {
+                subscriberSet = getPropSubscribers(dep.target, dep.prop);
+                console.log('other subscriber sets: ', subscriberSet);
+            }
             // Then delete this class instance from the the subscriber set
             subscriberSet.delete(this);
         }
@@ -40,14 +49,22 @@ export class Computed {
         this.dirty = false;
     }
 
+    _checkDepsSet(deps) {
+        let effects = null;
+        for (let dep of deps) {
+            console.log('dep in check deps: ', dep.target);
+            effects = getPropSubscribers(dep.target, dep.prop);
+            console.log('effects in check: ', effects);
+        }
+        return null;
+    }
+
     _invalidate() {
-        console.log("computed name in invalidate:", this.name);
         // check if dirty, if so return
         if (this.dirty) return;
         // set dirty to true
         this.dirty = true;
         // loop over dependants (downstream subscribers)
-        console.log('dependants', this.dependents)
         for (let sub of this.dependents) {
             // if the dependant is a computed call the invalidate method on that computed class instance
             if (sub instanceof Computed) {
@@ -59,6 +76,7 @@ export class Computed {
             }
         }
     }
+
 
     get value() {
         if (this.dirty) {

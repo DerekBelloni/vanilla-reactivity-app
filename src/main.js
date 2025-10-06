@@ -14,7 +14,7 @@ let inactiveSum = new Computed(() => {
         }
     });
     return sum;
-});
+}, 'inactiveSum');
 
 let activeSum = new Computed(() => {
     let sum = 0;
@@ -24,7 +24,7 @@ let activeSum = new Computed(() => {
         }
     });
     return sum;
-})
+}, 'activeSum')
 
 
 let testChainComputed = new Computed(() => {
@@ -164,7 +164,7 @@ function manageTaskCount() {
     document.getElementById('task-count').textContent = `Task Count: ${taskCount.value}`;
 }
 
-dependancyChange(manageTaskCount, 'manageTaskCount');
+//dependancyChange(manageTaskCount, 'manageTaskCount');
 dependancyChange(renderTasks, 'renderTasks');
 
 document.getElementById('filter').addEventListener('change', filterTasks);

@@ -71,6 +71,7 @@ function dependancyChange(fn, fnName, computed = false) {
 }
 
 function getPropSubscribers(target, prop) {
+    console.log('dependants: ', dependants);
     let depsMap = dependants.get(target)
     if (!depsMap) {
         depsMap = new Map();
@@ -81,7 +82,7 @@ function getPropSubscribers(target, prop) {
         dep = new Set();
         depsMap.set(prop, dep);
     }
-    console.log('dep to be returned', dep);
+    //console.log('dep to be returned', dep);
     return dep;
 }
 

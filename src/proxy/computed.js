@@ -18,6 +18,7 @@ export class Computed {
         console.log('[top level _compute, computed name]:', this.name);
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
+            console.log('this.deps: ', this.deps);
             // declare subscriber set so since it will be set in conditionally based scoping
             let subscriberSet = null;
             // Since we are maintaining an independent data structure for computeds
@@ -25,9 +26,11 @@ export class Computed {
             // for refs and reactives
             console.log('dep in _compute: ', dep)
             if (!!dep.deps && dep.deps.size > 0) {
-                console.log('dep in side size check: ', dep);
-                subscriberSet = this._checkDepsSet(dep.deps);
-                console.log('subscriber set for TEST:', subscriberSet);
+                for (let dependant of dep.deps) {
+                    console.log('dep:', dependant);
+                    // subscriberSet = getPropSubscribers(dependant.target, dependant.prop);
+                    //subscriberSet.delete(this);
+                }
             } else {
                 subscriberSet = getPropSubscribers(dep.target, dep.prop);
                 console.log('other subscriber sets: ', subscriberSet);
@@ -49,15 +52,6 @@ export class Computed {
         this.dirty = false;
     }
 
-    _checkDepsSet(deps) {
-        let effects = null;
-        for (let dep of deps) {
-            console.log('dep in check deps: ', dep.target);
-            effects = getPropSubscribers(dep.target, dep.prop);
-            console.log('effects in check: ', effects);
-        }
-        return null;
-    }
 
     _invalidate() {
         // check if dirty, if so return
@@ -68,7 +62,7 @@ export class Computed {
         for (let sub of this.dependents) {
             // if the dependant is a computed call the invalidate method on that computed class instance
             if (sub instanceof Computed) {
-                console.log('sub in this.dependents:', sub)
+                //console.log('sub in this.dependents:', sub)
                 sub._invalidate();
             } else {
                 // else it is an effect, in which case call it

@@ -26,17 +26,28 @@ export class Computed {
             // for refs and reactives
             console.log('dep in _compute: ', dep)
             if (!!dep.deps && dep.deps.size > 0) {
-                for (let dependant of dep.deps) {
-                    console.log('dep:', dependant);
-                    // subscriberSet = getPropSubscribers(dependant.target, dependant.prop);
-                    //subscriberSet.delete(this);
+                if (dep.dependents.has(this)) {
+
+                    console.log("Banana!!!");
+                    dep.dependents.delete(this);
                 }
+                //for (let dependant of dep.dependents) {
+                //  console.log('dep:', dependant);
+                // subscriberSet = getPropSubscribers(dependant.target, dependant.prop);
+                //subscriberSet.delete(this);
+
+                //console.log('dependent: ', dependant);
+                //  console.log('this: ', this);
+
+                //}
             } else {
                 subscriberSet = getPropSubscribers(dep.target, dep.prop);
                 console.log('other subscriber sets: ', subscriberSet);
+
+                subscriberSet.delete(this);
             }
             // Then delete this class instance from the the subscriber set
-            subscriberSet.delete(this);
+            //            subscriberSet.delete(this);
         }
         // call clear on the `this.deps` set to reset for a fresh collection
         this.deps.clear();

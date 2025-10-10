@@ -8,7 +8,6 @@ function reactive(obj) {
             const result = Reflect.get(target, prop, receiver);
             track(target, prop);
 
-
             if (typeof result === Object && result !== null) {
                 return reactive(result);
             }
@@ -50,6 +49,7 @@ function track(target, prop) {
 
 function trigger(target, prop) {
     const effects = getPropSubscribers(target, prop);
+
     effects.forEach((effect) => {
         if (effect instanceof Computed) {
             effect._invalidate()
@@ -71,7 +71,6 @@ function dependancyChange(fn, fnName, computed = false) {
 }
 
 function getPropSubscribers(target, prop) {
-    console.log('dependants: ', dependants);
     let depsMap = dependants.get(target)
     if (!depsMap) {
         depsMap = new Map();

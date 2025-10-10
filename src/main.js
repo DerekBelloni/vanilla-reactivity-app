@@ -28,7 +28,7 @@ let activeSum = new Computed(() => {
 
 
 let testChainComputed = new Computed(() => {
-    return `Inactive Sum: ${inactiveSum.value}, Active Sum: ${activeSum.value}`
+    return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 
 function renderTasks() {

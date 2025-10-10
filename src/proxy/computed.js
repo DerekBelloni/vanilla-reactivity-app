@@ -16,50 +16,27 @@ export class Computed {
 
     _compute() {
         console.log('[top level _compute, computed name]:', this.name);
+        console.log('global active subscriber: ', globals.activeSubscriber._name);
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
             console.log('this.deps: ', this.deps);
-            // declare subscriber set so since it will be set in conditionally based scoping
             let subscriberSet = null;
-            // Since we are maintaining an independent data structure for computeds
-            // We need to retrieve the deps that the computed subcribes to out of the weak map
-            // for refs and reactives
             console.log('dep in _compute: ', dep)
             if (!!dep.deps && dep.deps.size > 0) {
                 if (dep.dependents.has(this)) {
-
-                    console.log("Banana!!!");
                     dep.dependents.delete(this);
                 }
-                //for (let dependant of dep.dependents) {
-                //  console.log('dep:', dependant);
-                // subscriberSet = getPropSubscribers(dependant.target, dependant.prop);
-                //subscriberSet.delete(this);
-
-                //console.log('dependent: ', dependant);
-                //  console.log('this: ', this);
-
-                //}
             } else {
                 subscriberSet = getPropSubscribers(dep.target, dep.prop);
                 console.log('other subscriber sets: ', subscriberSet);
-
-                subscriberSet.delete(this);
+                //  subscriberSet.delete(this);
             }
-            // Then delete this class instance from the the subscriber set
-            //            subscriberSet.delete(this);
         }
-        // call clear on the `this.deps` set to reset for a fresh collection
         this.deps.clear();
-        // capture the previous activeSubscriber in case we need to back track up a hierarchy
         let prev = globals.activeSubscriber
-        // set the global active subscriber to this class instance
         globals.activeSubscriber = this;
-        // need to run the getter and then set that to `this.cached`
         this.cached = this.getter();
-        // reset the global active subscriber to prev
         globals.activeSubscriber = prev;
-        // set dirty to false
         this.dirty = false;
     }
 
@@ -91,7 +68,8 @@ export class Computed {
         if (globals.activeSubscriber) {
             this.dependents.add(globals.activeSubscriber);
             if (globals.activeSubscriber instanceof Computed) {
-                globals.activeSubscriber.deps.add(this);
+                console.log('global subscriber deps:', globals.activeSubscriber.deps);
+                //globals.activeSubscriber.deps.add(this);
             }
         }
 

@@ -16,7 +16,6 @@ export class Computed {
 
     _compute() {
         console.log('[top level _compute, computed name]:', this.name);
-        console.log('global active subscriber: ', globals.activeSubscriber._name);
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
             console.log('this.deps: ', this.deps);
@@ -47,32 +46,44 @@ export class Computed {
         // set dirty to true
         this.dirty = true;
         // loop over dependants (downstream subscribers)
+        const computedSubs = [];
+        const effects = [];
         for (let sub of this.dependents) {
             // if the dependant is a computed call the invalidate method on that computed class instance
             if (sub instanceof Computed) {
-                //console.log('sub in this.dependents:', sub)
-                sub._invalidate();
+                console.log('sub in this.dependents:', sub)
+                //sub._invalidate();
+                computedSubs.push(sub);
             } else {
                 // else it is an effect, in which case call it
-                sub();
+                //sub();
+                effects.push(sub);
             }
         }
+
+        computedSubs.forEach((sub) => sub._invalidate);
+        effects.forEach((sub) => sub());
     }
 
 
     get value() {
+        console.log('----------------------------------------------------------------------------------');
         if (this.dirty) {
             this._compute();
         }
-
+        console.log('computed name in get: ', this.name);
         if (globals.activeSubscriber) {
+            console.log('there is an active subscriber')
             this.dependents.add(globals.activeSubscriber);
             if (globals.activeSubscriber instanceof Computed) {
-                console.log('global subscriber deps:', globals.activeSubscriber.deps);
-                //globals.activeSubscriber.deps.add(this);
+                console.log('global subscriber:', globals.activeSubscriber);
+                console.log('active computed instance: ', this);
+                globals.activeSubscriber.deps.add(this);
             }
         }
+        console.log('cached in computed get: ', this.cached);
 
+        console.log('--------------------------------------------------------------------------------');
         return this.cached;
     }
 }

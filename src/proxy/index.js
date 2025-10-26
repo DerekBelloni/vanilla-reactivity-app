@@ -59,7 +59,7 @@ function trigger(target, prop) {
     });
 }
 
-function dependancyChange(fn, fnName, computed = false) {
+function dependencyChange(fn, fnName, computed = false) {
     let effect = () => {
         globals.activeSubscriber = effect;
         fn();
@@ -85,4 +85,4 @@ function getPropSubscribers(target, prop) {
     return dep;
 }
 
-export { reactive, ref, dependancyChange, getPropSubscribers };
+export { reactive, ref, dependencyChange, getPropSubscribers };

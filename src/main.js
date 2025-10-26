@@ -1,10 +1,12 @@
-import { dependants, state, taskCount } from "./appState";
+import { state, taskCount } from "./appState";
 import { Computed } from "./proxy/computed.js";
-import { reactive, dependancyChange, ref } from "./proxy/index.js";
+import { reactive, dependencyChange, ref } from "./proxy/index.js";
 
 let filteredTasks = reactive([]);
 let filterActive = ref(false);
 let activeState = reactive([]);
+let testValueOne = ref(false);
+let testValueTwo = ref(true);
 
 let inactiveSum = new Computed(() => {
     let sum = 0;
@@ -142,8 +144,12 @@ function filterTasks() {
     filteredTasks.push(...temp);
 }
 
-function resetTaskIDs() {
-
+function testStaleSubs() {
+    if (testValueOne.value) {
+        console.log("test value one");
+    } else {
+        console.log("test value two");
+    }
 }
 
 function deleteTask(event) {
@@ -164,8 +170,10 @@ function manageTaskCount() {
     document.getElementById('task-count').textContent = `Task Count: ${taskCount.value}`;
 }
 
+
 //dependancyChange(manageTaskCount, 'manageTaskCount');
-dependancyChange(renderTasks, 'renderTasks');
+dependencyChange(renderTasks, 'renderTasks');
+dependencyChange(testStaleSubs, 'testStaleSubs');
 
 document.getElementById('filter').addEventListener('change', filterTasks);
 document.getElementById('addTask').addEventListener('click', createTask);

@@ -85,4 +85,4 @@ function getPropSubscribers(target, prop) {
     return dep;
 }
 
-export { reactive, ref, dependencyChange, getPropSubscribers };
+export { reactive, ref, dependencyChange, getPropSubscribers, track };

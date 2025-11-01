@@ -30,6 +30,7 @@ let activeSum = new Computed(() => {
 
 
 let testChainComputed = new Computed(() => {
+    console.log('in test chain computed');
     return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 
@@ -173,7 +174,7 @@ function manageTaskCount() {
 
 //dependancyChange(manageTaskCount, 'manageTaskCount');
 dependencyChange(renderTasks, 'renderTasks');
-dependencyChange(testStaleSubs, 'testStaleSubs');
+//dependencyChange(testStaleSubs, 'testStaleSubs');
 
 document.getElementById('filter').addEventListener('change', filterTasks);
 document.getElementById('addTask').addEventListener('click', createTask);

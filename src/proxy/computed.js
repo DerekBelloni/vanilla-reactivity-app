@@ -28,7 +28,7 @@ export class Computed {
             } else {
                 subscriberSet = getPropSubscribers(dep.target, dep.prop);
                 console.log('other subscriber sets: ', subscriberSet);
-                //  subscriberSet.delete(this);
+                //subscriberSet.delete(this);
             }
         }
         this.deps.clear();
@@ -53,7 +53,7 @@ export class Computed {
             }
         }
 
-        computedSubs.forEach((sub) => sub._invalidate);
+        computedSubs.forEach((sub) => sub._invalidate());
         effects.forEach((sub) => sub());
     }
 

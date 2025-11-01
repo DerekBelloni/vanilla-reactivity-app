@@ -37,6 +37,8 @@ function ref(value) {
 }
 
 function track(target, prop) {
+    console.log('target: ', target)
+    console.log('prop:', prop);
     if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
         effects.add(globals.activeSubscriber)
@@ -52,7 +54,12 @@ function trigger(target, prop) {
 
     effects.forEach((effect) => {
         if (effect instanceof Computed) {
-            effect._invalidate()
+            //effect._invalidate()
+            console.log('inside computed check for trigger', effect)
+            if (effect.dirty) return;
+            const computedSubs = [];
+            const effects = [];
+            //for (let sub
         } else {
             effect()
         }

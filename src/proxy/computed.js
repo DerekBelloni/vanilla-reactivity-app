@@ -15,19 +15,19 @@ export class Computed {
     }
 
     _compute() {
-        console.log('[top level _compute, computed name]:', this.name);
+        //console.log('[top level _compute, computed name]:', this.name);
         // clean up, unsubscribe from existing deps
         for (let dep of this.deps) {
-            console.log('this.deps: ', this.deps);
+            //console.log('this.deps: ', this.deps);
             let subscriberSet = null;
-            console.log('dep in _compute: ', dep)
+            //console.log('dep in _compute: ', dep)
             if (!!dep.deps && dep.deps.size > 0) {
                 if (dep.dependents.has(this)) {
                     dep.dependents.delete(this);
                 }
             } else {
                 subscriberSet = getPropSubscribers(dep.target, dep.prop);
-                console.log('other subscriber sets: ', subscriberSet);
+                //           console.log('other subscriber sets: ', subscriberSet);
                 //subscriberSet.delete(this);
             }
         }
@@ -40,22 +40,22 @@ export class Computed {
     }
 
 
-    _invalidate() {
-        if (this.dirty) return;
-        this.dirty = true;
-        const computedSubs = [];
-        const effects = [];
-        for (let sub of this.dependents) {
-            if (sub instanceof Computed) {
-                computedSubs.push(sub);
-            } else {
-                effects.push(sub);
-            }
-        }
+    // _invalidate() {
+    //   if (this.dirty) return;
+    //   this.dirty = true;
+    //   const computedSubs = [];
+    //   const effects = [];
+    //   for (let sub of this.dependents) {
+    //       if (sub instanceof Computed) {
+    //           computedSubs.push(sub);
+    //       } else {
+    //           effects.push(sub);
+    //       }
+    //   }
 
-        computedSubs.forEach((sub) => sub._invalidate());
-        effects.forEach((sub) => sub());
-    }
+    //   computedSubs.forEach((sub) => sub._invalidate());
+    //   effects.forEach((sub) => sub());
+    // }
 
 
     get value() {

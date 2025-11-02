@@ -5,6 +5,7 @@ import { Computed } from '../proxy/computed';
 function reactive(obj) {
     return new Proxy(obj, {
         get(target, prop, receiver) {
+            console.log('prop in reactive: ', prop);
             const result = Reflect.get(target, prop, receiver);
             track(target, prop);
 
@@ -25,7 +26,7 @@ function reactive(obj) {
 function ref(value) {
     const refObject = {
         get value() {
-            track(refObject, 'value');
+            track(refObject, 'value', 'refObj');
             return value;
         },
         set value(newVal) {
@@ -43,9 +44,9 @@ function track(target, prop) {
         const effects = getPropSubscribers(target, prop)
         effects.add(globals.activeSubscriber)
 
-        if (globals.activeSubscriber.deps instanceof Set) {
-            globals.activeSubscriber.deps.add({ target, prop })
-        }
+        //if (globals.activeSubscriber.deps instanceof Set) {
+        //globals.activeSubscriber.deps.add({ target, prop })
+        //}
     }
 }
 
@@ -55,7 +56,7 @@ function trigger(target, prop) {
     effects.forEach((effect) => {
         if (effect instanceof Computed) {
             //effect._invalidate()
-            console.log('inside computed check for trigger', effect)
+            //console.log('inside computed check for trigger', effect)
             if (effect.dirty) return;
             const computedSubs = [];
             const effects = [];
@@ -77,7 +78,7 @@ function dependencyChange(fn, fnName, computed = false) {
     effect()
 }
 
-function getPropSubscribers(target, prop) {
+function getPropSubscribers(target, prop, type = null) {
     let depsMap = dependants.get(target)
     if (!depsMap) {
         depsMap = new Map();
@@ -88,8 +89,10 @@ function getPropSubscribers(target, prop) {
         dep = new Set();
         depsMap.set(prop, dep);
     }
-    //console.log('dep to be returned', dep);
+    if (type === 'refObj') {
+        console.log('dep to be returned', dep);
+    }
     return dep;
 }
 
-export { reactive, ref, dependencyChange, getPropSubscribers, track };
+export { reactive, ref, dependencyChange, getPropSubscribers, track, trigger };

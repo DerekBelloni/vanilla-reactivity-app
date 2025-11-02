@@ -30,7 +30,7 @@ let activeSum = new Computed(() => {
 
 
 let testChainComputed = new Computed(() => {
-    console.log('in test chain computed');
+    // console.log('in test chain computed');
     return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 

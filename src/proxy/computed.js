@@ -1,4 +1,4 @@
-import { getPropSubscribers } from "./index.js";
+import { getPropSubscribers, track, trigger } from "./index.js";
 import { globals } from "../appState";
 
 
@@ -63,7 +63,10 @@ export class Computed {
             this._compute();
         }
         if (globals.activeSubscriber) {
-            this.dependents.add(globals.activeSubscriber);
+            //this.dependents.add(globals.activeSubscriber);
+            track(this, 'computed')
+
+
             if (globals.activeSubscriber instanceof Computed) {
                 globals.activeSubscriber.deps.add(this);
             }

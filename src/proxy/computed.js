@@ -7,31 +7,50 @@ export class Computed {
         this.dirty = true;
         this.cached = null;
         // upstream reactives
-        this.deps = new Set();
+        // this.deps = new Set();
         // downstream subscribers
-        this.dependents = new Set();
+        // this.dependents = new Set();
         this.getter = getter;
         this.name = name;
     }
 
     _compute() {
-        //console.log('[top level _compute, computed name]:', this.name);
         // clean up, unsubscribe from existing deps
-        for (let dep of this.deps) {
-            //console.log('this.deps: ', this.deps);
-            let subscriberSet = null;
-            //console.log('dep in _compute: ', dep)
-            if (!!dep.deps && dep.deps.size > 0) {
-                if (dep.dependents.has(this)) {
-                    dep.dependents.delete(this);
-                }
-            } else {
-                subscriberSet = getPropSubscribers(dep.target, dep.prop);
-                //           console.log('other subscriber sets: ', subscriberSet);
-                //subscriberSet.delete(this);
-            }
-        }
-        this.deps.clear();
+
+
+
+
+
+        // OLD
+        // for (let dep of this.deps) {
+        // let subscriberSet = null;
+        // if (!!dep.deps && dep.deps.size > 0) {
+        // if (dep.dependents.has(this)) {
+        // dep.dependents.delete(this);
+        // }
+        // } else {
+        // subscriberSet = getPropSubscribers(dep.target, dep.prop);
+        //subscriberSet.delete(this);
+        // }
+        // }
+
+        // NEW
+        // Loop over dependents
+        // Check upstream (reactives) that are subscribed to this instance and remove thatdependancy
+        // Check downstream subcribers (other effects and computeds) and remove those subscribers dependancy on this instance
+        console.log("computed name:", this.name);
+        let depsMap = getPropSubscribers(this);
+        console.log('depsMap in computed:', depsMap);
+
+
+
+
+
+
+
+
+
+        //this.deps.clear();
         let prev = globals.activeSubscriber
         globals.activeSubscriber = this;
         this.cached = this.getter();
@@ -59,7 +78,9 @@ export class Computed {
 
 
     get value() {
+        console.log('in get in computed');
         if (this.dirty) {
+            console.log('is dirty');
             this._compute();
         }
         if (globals.activeSubscriber) {
@@ -68,7 +89,7 @@ export class Computed {
 
 
             if (globals.activeSubscriber instanceof Computed) {
-                globals.activeSubscriber.deps.add(this);
+                //globals.activeSubscriber.deps.add(this);
             }
         }
 

@@ -5,7 +5,6 @@ import { Computed } from '../proxy/computed';
 function reactive(obj) {
     return new Proxy(obj, {
         get(target, prop, receiver) {
-            console.log('prop in reactive: ', prop);
             const result = Reflect.get(target, prop, receiver);
             track(target, prop);
 
@@ -38,10 +37,9 @@ function ref(value) {
 }
 
 function track(target, prop) {
-    console.log('target: ', target)
-    console.log('prop:', prop);
     if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
+        console.log('effects: ', effects)
         effects.add(globals.activeSubscriber)
 
         //if (globals.activeSubscriber.deps instanceof Set) {
@@ -55,12 +53,9 @@ function trigger(target, prop) {
 
     effects.forEach((effect) => {
         if (effect instanceof Computed) {
-            //effect._invalidate()
-            //console.log('inside computed check for trigger', effect)
             if (effect.dirty) return;
-            const computedSubs = [];
-            const effects = [];
-            //for (let sub
+            effect.dirty = true;
+            trigger(effect, 'computed')
         } else {
             effect()
         }
@@ -88,9 +83,6 @@ function getPropSubscribers(target, prop, type = null) {
     if (!dep) {
         dep = new Set();
         depsMap.set(prop, dep);
-    }
-    if (type === 'refObj') {
-        console.log('dep to be returned', dep);
     }
     return dep;
 }

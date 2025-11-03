@@ -102,7 +102,6 @@ function completeTask(event) {
     if (event.target.type === 'checkbox') {
         const taskID = event.target.parentElement.dataset.id;
         if (taskID !== null) {
-            console.log('inside complete task');
             const completedTask = state[taskID - 1];
             completedTask.complete = !completedTask.complete;
         }

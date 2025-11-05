@@ -6,7 +6,6 @@ let filteredTasks = reactive([]);
 let filterActive = ref(false);
 let activeState = reactive([]);
 let testValueOne = ref(false);
-let testValueTwo = ref(true);
 
 let inactiveSum = new Computed(() => {
     let sum = 0;
@@ -30,7 +29,7 @@ let activeSum = new Computed(() => {
 
 
 let testChainComputed = new Computed(() => {
-    // console.log('in test chain computed');
+    console.log('in test chain def')
     return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 

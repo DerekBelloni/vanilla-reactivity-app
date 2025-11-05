@@ -78,9 +78,9 @@ export class Computed {
 
 
     get value() {
-        console.log('in get in computed');
+        // console.log('in get in computed');
         if (this.dirty) {
-            console.log('is dirty');
+            //  console.log('is dirty');
             this._compute();
         }
         if (globals.activeSubscriber) {

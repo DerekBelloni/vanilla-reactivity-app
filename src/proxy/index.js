@@ -37,14 +37,17 @@ function ref(value) {
 }
 
 function track(target, prop) {
+    console.log('inside track');
     if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
-        console.log('effects: ', effects)
         effects.add(globals.activeSubscriber)
 
-        //if (globals.activeSubscriber.deps instanceof Set) {
-        //globals.activeSubscriber.deps.add({ target, prop })
-        //}
+        // check if the global active subscriber is a computed
+        // if so call recursively handing in the subscriber as the target
+        // and 'computed' as the prop to see if anything upstream is a computed
+        // if so track it, I might need to call dependamcyChange on the effects handed back
+        // for a computed if those effects themselvers are computeds. maybe this happens in the computed get? 
+
     }
 }
 
@@ -63,6 +66,7 @@ function trigger(target, prop) {
 }
 
 function dependencyChange(fn, fnName, computed = false) {
+    console.log('in dependency change');
     let effect = () => {
         globals.activeSubscriber = effect;
         fn();

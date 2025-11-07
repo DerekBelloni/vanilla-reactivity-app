@@ -33,6 +33,7 @@ let testChainComputed = new Computed(() => {
     return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 
+
 function renderTasks() {
     const taskDiv = document.getElementById('tasks');
     taskDiv.addEventListener('click', completeTask);

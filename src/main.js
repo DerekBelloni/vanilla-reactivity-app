@@ -29,7 +29,6 @@ let activeSum = new Computed(() => {
 
 
 let testChainComputed = new Computed(() => {
-    console.log('in test chain def')
     return `Incomplete Sum: ${inactiveSum.value}, Complete Sum: ${activeSum.value}`
 }, 'testChain')
 

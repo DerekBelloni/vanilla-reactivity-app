@@ -1,4 +1,4 @@
-import { dependencyChange, getPropSubscribers, track, trigger } from "./index.js";
+import { getPropSubscribers, track } from "./index.js";
 import { globals } from "../appState";
 
 
@@ -6,23 +6,14 @@ export class Computed {
     constructor(getter, name = null) {
         this.dirty = true;
         this.cached = null;
-        // upstream reactives
-        // this.deps = new Set();
-        // downstream subscribers
-        // this.dependents = new Set();
         this.getter = getter;
         this.name = name;
     }
 
     _compute() {
-        // NEW
-        // Loop over dependents
-        // Check upstream (reactives) that are subscribed to this instance and remove that dependancy
-        // Check downstream subcribers (other effects and computeds) and remove those subscribers dependancy on this instance
         console.log("computed name:", this.name);
-        let depsMap = getPropSubscribers(this, 'computed');
-        console.log('depsMap in computed:', depsMap);
-
+        let deps = getPropSubscribers(this, 'computed');
+        this._cleanupOldDeps(deps);
 
         let prev = globals.activeSubscriber
         globals.activeSubscriber = this;
@@ -31,18 +22,21 @@ export class Computed {
         this.dirty = false;
     }
 
+    _cleanupOldDeps(deps) {
+        for (let dep of deps) {
+            console.log('dep in _cleanupOldDeps: ', dep);
+            deps.delete(dep);
+        }
+        console.log('after cleanup, deps size: ', deps.size);
+    }
+
     get value() {
         if (this.dirty) {
             this._compute();
         }
+
         if (globals.activeSubscriber) {
             track(this, 'computed')
-
-
-            if (globals.activeSubscriber instanceof Computed) {
-                console.log('globals in computed get: ', globals.activeSubscriber);
-                //globals.activeSubscriber.deps.add(this);
-            }
         }
 
         return this.cached;

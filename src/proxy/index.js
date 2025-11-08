@@ -37,7 +37,6 @@ function ref(value) {
 }
 
 function track(target, prop) {
-    console.log('inside track');
     if (globals.activeSubscriber) {
         const effects = getPropSubscribers(target, prop)
         effects.add(globals.activeSubscriber)
@@ -56,7 +55,6 @@ function trigger(target, prop) {
             effect()
         }
     });
-    console.log('dependents at end of trigger:', dependants)
 }
 
 function dependencyChange(fn, fnName, computed = false) {

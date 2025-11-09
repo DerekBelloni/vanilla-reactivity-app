@@ -68,7 +68,7 @@ function dependencyChange(fn, fnName, computed = false) {
     effect()
 }
 
-function getPropSubscribers(target, prop, type = null) {
+function getPropSubscribers(target, prop) {
     let depsMap = dependants.get(target)
     if (!depsMap) {
         depsMap = new Map();

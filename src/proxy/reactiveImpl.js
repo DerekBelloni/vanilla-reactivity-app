@@ -1,5 +1,4 @@
-import { globals, dependants } from '../appState';
-import { getPropSubscribers } from './index.js';
+import { track, trigger } from './index.js';
 
 export class ReactiveImpl {
     constructor(obj,) {

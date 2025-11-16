@@ -1,7 +1,6 @@
 import { getPropSubscribers, track } from "./index.js";
 import { globals } from "../appState";
 
-
 export class Computed {
     constructor(getter, name = null) {
         this.dirty = true;
@@ -11,7 +10,6 @@ export class Computed {
     }
 
     _compute() {
-        console.log("computed name:", this.name);
         let deps = getPropSubscribers(this, 'computed');
         this._cleanupOldDeps(deps);
 
@@ -24,10 +22,8 @@ export class Computed {
 
     _cleanupOldDeps(deps) {
         for (let dep of deps) {
-            console.log('dep in _cleanupOldDeps: ', dep);
             deps.delete(dep);
         }
-        console.log('after cleanup, deps size: ', deps.size);
     }
 
     get value() {

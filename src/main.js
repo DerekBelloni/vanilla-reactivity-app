@@ -1,4 +1,4 @@
-import { state, taskCount } from "./appState";
+import { globals, state, taskCount } from "./appState";
 import { Computed } from "./proxy/computed.js";
 import { reactive, dependencyChange, ref } from "./proxy/index.js";
 

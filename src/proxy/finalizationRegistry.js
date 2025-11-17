@@ -1,8 +1,13 @@
 export class CleanupRegistry {
     constructor() {
-        this.registry = new FinalizationRegistry(() => {
-            console.log('value has been garbage collected')
+        this.registry = new FinalizationRegistry((val) => {
+            console.log('value has been garbage collected', val)
+            this.cleanupStaleDeps();
         });
+    }
+
+    cleanupStaleDeps() {
+
     }
 
     registerItem(item, info) {

@@ -63,10 +63,15 @@ function dependencyChange(fn, fnName, computed = false) {
         fn();
         globals.activeSubscriber = null;
     }
+    globals.cleanupRegistry.registerItem(fn, fnName);
     effect.__name = fnName;
     if (computed) effect.__isComputed = true;
     effect()
+    // for testing registry cleanup
+    return effect;
 }
+
+
 
 function getPropSubscribers(target, prop) {
     let depsMap = dependants.get(target)
